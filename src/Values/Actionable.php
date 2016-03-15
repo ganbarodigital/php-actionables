@@ -43,6 +43,15 @@
 
 namespace GanbaroDigital\Actionables\Values;
 
+/**
+ * An Actionable represents:
+ *
+ * - a callable piece of PHP code
+ * - with associated metadata
+ *
+ * It's the metadata that adds the real value. If your app doesn't need
+ * the metadata, you're better off sticking with PHP's native callables.
+ */
 class Actionable
 {
     /**
@@ -58,17 +67,27 @@ class Actionable
     private $sourceFilename;
 
     /**
+     * a (possibly empty) list of tags that describe this Actionable
+     *
+     * @var array
+     */
+    private $tags = [];
+
+    /**
      * constructor
      *
      * @param callable $action
      *        the callable code that we represent
      * @param string $sourceFilename
      *        the full path to the file where $action's code is defined
+     * @param array $tags
+     *        a list of tags that describe this Actionable
      */
-    public function __construct(callable $action, $sourceFilename)
+    public function __construct(callable $action, $sourceFilename, $tags = [])
     {
         $this->action = $action;
         $this->sourceFilename = $sourceFilename;
+        $this->tags = array_combine(array_values($tags), array_values($tags));
     }
 
     /**
@@ -92,5 +111,29 @@ class Actionable
     public function getSourceFilename()
     {
         return $this->sourceFilename;
+    }
+
+    /**
+     * what is the full list of this Actionable's tags?
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return array_values($this->tags);
+    }
+
+    /**
+     * does this Actionable have a specific tag?
+     *
+     * @param  string $tagName
+     *         the tag that we want to check for
+     * @return boolean
+     *         TRUE if we have this tag
+     *         FALSE otherwise
+     */
+    public function hasTag($tagName)
+    {
+        return isset($this->tags[$tagName]);
     }
 }

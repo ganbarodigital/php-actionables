@@ -123,4 +123,112 @@ class ActionableTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sourceFilename, $actualResult);
     }
 
+    /**
+     * @covers ::__construct
+     * @covers ::getTags
+     */
+    public function testHasNoTagsByDefault()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $callable = function(){};
+        $sourceFilename = __FILE__;
+        $unit = new Actionable($callable, $sourceFilename);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = $unit->getTags();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals([], $actualResult);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getTags
+     */
+    public function testCanProvideAListOfTags()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $callable = function(){};
+        $sourceFilename = __FILE__;
+        $tags = [
+            'tag1',
+            'tag2'
+        ];
+        $unit = new Actionable($callable, $sourceFilename, $tags);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = $unit->getTags();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($tags, $actualResult);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::hasTag
+     */
+    public function testCanCheckIfTagged()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $callable = function(){};
+        $sourceFilename = __FILE__;
+        $tags = [
+            'tag1',
+            'tag2'
+        ];
+        $unit = new Actionable($callable, $sourceFilename, $tags);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = $unit->hasTag('tag1');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($actualResult);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::hasTag
+     */
+    public function testCanCheckIfNotTagged()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $callable = function(){};
+        $sourceFilename = __FILE__;
+        $tags = [
+            'tag1',
+            'tag2'
+        ];
+        $unit = new Actionable($callable, $sourceFilename, $tags);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = $unit->hasTag('tag3');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertFalse($actualResult);
+    }
+
 }
